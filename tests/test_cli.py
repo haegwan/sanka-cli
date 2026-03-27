@@ -96,8 +96,10 @@ def test_auth_login_status_and_logout(
 
 def test_profiles_list_and_use(
     runner: CliRunner,
+    fake_keyring: _FakeKeyring,
     tmp_path,
 ) -> None:
+    _ = fake_keyring
     env = {"XDG_CONFIG_HOME": str(tmp_path)}
 
     result_default = runner.invoke(
