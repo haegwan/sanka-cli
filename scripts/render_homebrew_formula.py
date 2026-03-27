@@ -36,7 +36,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--version", required=True)
     parser.add_argument("--sha256", required=True)
-    parser.add_argument("--repo", default="haegwan/sanka-cli")
+    parser.add_argument("--repo", default="sankaHQ/sanka-cli")
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 

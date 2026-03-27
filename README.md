@@ -14,13 +14,13 @@ The CLI keeps business logic on the server. It handles:
 From GitHub:
 
 ```bash
-uv tool install "git+https://github.com/haegwan/sanka-cli.git"
+uv tool install "git+https://github.com/sankaHQ/sanka-cli.git"
 ```
 
 Bootstrap script:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/haegwan/sanka-cli/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/sankaHQ/sanka-cli/main/scripts/install.sh | sh
 ```
 
 From PyPI after the first package release:
@@ -30,11 +30,11 @@ uv tool install sanka-cli
 ```
 
 Homebrew support is published through
-[`haegwan/homebrew-tap`](https://github.com/haegwan/homebrew-tap). Install with:
+[`sankaHQ/homebrew-tap`](https://github.com/sankaHQ/homebrew-tap). Install with:
 
 ```bash
-brew tap haegwan/tap
-brew install haegwan/tap/sanka
+brew tap sankaHQ/tap
+brew install sankaHQ/tap/sanka
 ```
 
 ## Authenticate
