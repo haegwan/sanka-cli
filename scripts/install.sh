@@ -8,7 +8,7 @@ if ! command -v uv >/dev/null 2>&1; then
 fi
 
 PACKAGE_SPEC="${SANKA_CLI_PACKAGE_SPEC:-sanka-cli}"
-FALLBACK_SPEC="${SANKA_CLI_FALLBACK_SPEC:-git+https://github.com/haegwan/sanka-cli.git}"
+FALLBACK_SPEC="${SANKA_CLI_FALLBACK_SPEC:-git+https://github.com/sankaHQ/sanka-cli.git}"
 
 echo "Installing sanka CLI..."
 if uv tool install --upgrade "$PACKAGE_SPEC"; then

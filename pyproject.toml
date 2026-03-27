@@ -24,10 +24,10 @@ dependencies = [
 sanka = "sanka_cli.main:main"
 
 [project.urls]
-Homepage = "https://github.com/haegwan/sanka-cli"
-Documentation = "https://github.com/haegwan/sanka-cli/blob/main/README.md"
-Repository = "https://github.com/haegwan/sanka-cli"
-Issues = "https://github.com/haegwan/sanka-cli/issues"
+Homepage = "https://github.com/sankaHQ/sanka-cli"
+Documentation = "https://github.com/sankaHQ/sanka-cli/blob/main/README.md"
+Repository = "https://github.com/sankaHQ/sanka-cli"
+Issues = "https://github.com/sankaHQ/sanka-cli/issues"
 
 [dependency-groups]
 dev = [
