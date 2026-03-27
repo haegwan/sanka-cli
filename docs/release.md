@@ -12,7 +12,7 @@ artifact checksum.
    artifacts to the GitHub release.
 4. The release workflow renders `packaging/homebrew/sanka.rb` with the exact checksum
    for the tagged sdist and uploads that formula as a release artifact.
-5. Publish the generated formula into your Homebrew tap repo.
+5. Copy the generated formula into `haegwan/homebrew-tap`.
 6. Publish to PyPI when the repository has a configured `PYPI_API_TOKEN`.
 
 ## Homebrew Formula

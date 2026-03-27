@@ -29,11 +29,11 @@ From PyPI after the first package release:
 uv tool install sanka-cli
 ```
 
-Homebrew support is generated from tagged releases through
-[`packaging/homebrew/sanka.rb`](packaging/homebrew/sanka.rb). Publish that formula to
-your tap repo after a release, then install with:
+Homebrew support is published through
+[`haegwan/homebrew-tap`](https://github.com/haegwan/homebrew-tap). Install with:
 
 ```bash
+brew tap haegwan/tap
 brew install haegwan/tap/sanka
 ```
 

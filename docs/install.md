@@ -27,10 +27,11 @@ uv tool install sanka-cli
 
 ## Homebrew
 
-Tagged releases generate `packaging/homebrew/sanka.rb` with the exact release checksum.
-Publish that formula into your tap repo, then install with:
+Tagged releases generate `packaging/homebrew/sanka.rb` with the exact release checksum,
+and the published tap lives in [`haegwan/homebrew-tap`](https://github.com/haegwan/homebrew-tap):
 
 ```bash
+brew tap haegwan/tap
 brew install haegwan/tap/sanka
 ```
 
