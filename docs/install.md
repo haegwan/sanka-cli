@@ -31,7 +31,6 @@ Tagged releases generate `packaging/homebrew/sanka.rb` with the exact release ch
 and the published tap lives in [`sankaHQ/homebrew-tap`](https://github.com/sankaHQ/homebrew-tap):
 
 ```bash
-brew tap sankaHQ/tap
 brew install sankaHQ/tap/sanka
 ```
 

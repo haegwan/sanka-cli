@@ -33,7 +33,6 @@ Homebrew support is published through
 [`sankaHQ/homebrew-tap`](https://github.com/sankaHQ/homebrew-tap). Install with:
 
 ```bash
-brew tap sankaHQ/tap
 brew install sankaHQ/tap/sanka
 ```
 
