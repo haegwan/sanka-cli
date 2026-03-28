@@ -30,10 +30,11 @@ uv tool install sanka-cli
 ```
 
 Homebrew support is published through
-[`sankaHQ/homebrew-tap`](https://github.com/sankaHQ/homebrew-tap). Install with:
+[`sankaHQ/homebrew-cli`](https://github.com/sankaHQ/homebrew-cli). Install with:
 
 ```bash
-brew install sankaHQ/tap/sanka
+brew tap sankaHQ/cli
+brew install sankaHQ/cli/sanka
 ```
 
 ## Authenticate
