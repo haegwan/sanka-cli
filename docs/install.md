@@ -28,10 +28,11 @@ uv tool install sanka-cli
 ## Homebrew
 
 Tagged releases generate `packaging/homebrew/sanka.rb` with the exact release checksum,
-and the published tap lives in [`sankaHQ/homebrew-tap`](https://github.com/sankaHQ/homebrew-tap):
+and the published tap lives in [`sankaHQ/homebrew-cli`](https://github.com/sankaHQ/homebrew-cli):
 
 ```bash
-brew install sankaHQ/tap/sanka
+brew tap sankaHQ/cli
+brew install sankaHQ/cli/sanka
 ```
 
 ## Local Development
