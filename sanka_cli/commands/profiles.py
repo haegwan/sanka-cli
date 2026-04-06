@@ -14,7 +14,11 @@ def profiles() -> None:
 @profiles.command("list")
 @click.pass_obj
 def profiles_list(state: CLIState) -> None:
-    runtime.emit_payload({"data": runtime.list_profiles()}, state)
+    try:
+        payload = runtime.list_profiles()
+    except runtime.CredentialStoreError as exc:
+        raise click.ClickException(str(exc)) from exc
+    runtime.emit_payload({"data": payload}, state)
 
 
 @profiles.command("use")

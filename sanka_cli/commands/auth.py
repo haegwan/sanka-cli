@@ -28,11 +28,14 @@ def auth_login(
     resolved_profile_name = profile_name or state.profile or "default"
     resolved_base_url = (base_url or state.base_url or DEFAULT_BASE_URL).rstrip("/")
     runtime.upsert_profile(resolved_profile_name, base_url=resolved_base_url)
-    runtime.store_tokens(
-        resolved_profile_name,
-        access_token=access_token,
-        refresh_token=refresh_token,
-    )
+    try:
+        runtime.store_tokens(
+            resolved_profile_name,
+            access_token=access_token,
+            refresh_token=refresh_token,
+        )
+    except runtime.CredentialStoreError as exc:
+        raise click.ClickException(str(exc)) from exc
     runtime.emit_payload(
         {
             "message": "saved",
@@ -46,10 +49,13 @@ def auth_login(
 @auth.command("status")
 @click.pass_obj
 def auth_status(state: CLIState) -> None:
-    resolved = runtime.resolve_runtime(
-        profile_name=state.profile,
-        base_url_override=state.base_url,
-    )
+    try:
+        resolved = runtime.resolve_runtime(
+            profile_name=state.profile,
+            base_url_override=state.base_url,
+        )
+    except runtime.CredentialStoreError as exc:
+        raise click.ClickException(str(exc)) from exc
     payload = runtime.request_json(state, "GET", "/v1/public/auth/whoami")
     data = payload.get("data", payload)
     data["profile"] = resolved["profile_name"]

@@ -37,6 +37,16 @@ brew tap sankaHQ/cli
 brew install sankaHQ/cli/sanka
 ```
 
+If you previously installed `sanka` from the old `sankaHQ/tap` tap
+(`sankaHQ/homebrew-tap`), remove that formula and untap it first:
+
+```bash
+brew uninstall sanka
+brew untap sankaHQ/tap
+brew tap sankaHQ/cli
+brew install sankaHQ/cli/sanka
+```
+
 ## Authenticate
 
 Create a Developer API Token in Sanka, then save it locally:

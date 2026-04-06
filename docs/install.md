@@ -35,6 +35,17 @@ brew tap sankaHQ/cli
 brew install sankaHQ/cli/sanka
 ```
 
+If you installed an older preview from `sankaHQ/tap`
+(`sankaHQ/homebrew-tap`), remove the old formula and untap it before
+installing from the new tap:
+
+```bash
+brew uninstall sanka
+brew untap sankaHQ/tap
+brew tap sankaHQ/cli
+brew install sankaHQ/cli/sanka
+```
+
 ## Local Development
 
 ```bash

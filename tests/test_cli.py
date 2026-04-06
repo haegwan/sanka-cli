@@ -5,6 +5,7 @@ import json
 import pytest
 from click.testing import CliRunner
 
+from sanka_cli import config as cli_config
 from sanka_cli.main import cli
 
 
@@ -92,6 +93,40 @@ def test_auth_login_status_and_logout(
     assert logout_result.exit_code == 0, logout_result.output
     assert ("sanka-cli", "default:access_token") not in fake_keyring.values
     assert ("sanka-cli", "default:refresh_token") not in fake_keyring.values
+
+
+def test_resolve_runtime_prefers_env_tokens_without_keyring(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    monkeypatch.setenv("SANKA_ACCESS_TOKEN", "env-access")
+    monkeypatch.setenv("SANKA_REFRESH_TOKEN", "env-refresh")
+
+    def _unexpected_get_tokens(profile_name: str) -> dict[str, str | None]:
+        raise AssertionError(f"get_tokens should not run for {profile_name}")
+
+    monkeypatch.setattr(cli_config, "get_tokens", _unexpected_get_tokens)
+    resolved = cli_config.resolve_runtime()
+    assert resolved["access_token"] == "env-access"
+    assert resolved["refresh_token"] == "env-refresh"
+    assert resolved["token_source"] == "env"
+
+
+def test_auth_status_surfaces_keychain_error_cleanly(
+    runner: CliRunner,
+    monkeypatch,
+) -> None:
+    monkeypatch.setattr(
+        "sanka_cli.runtime.resolve_runtime",
+        lambda **_kwargs: (_ for _ in ()).throw(
+            cli_config.CredentialStoreError("Keychain access is blocked")
+        ),
+    )
+
+    result = runner.invoke(cli, ["auth", "status"])
+    assert result.exit_code == 1
+    assert "Keychain access is blocked" in result.output
 
 
 def test_profiles_list_and_use(

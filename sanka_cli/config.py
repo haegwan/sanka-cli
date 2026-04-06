@@ -22,6 +22,10 @@ DEFAULT_PROFILE = "default"
 KEYRING_SERVICE = "sanka-cli"
 
 
+class CredentialStoreError(RuntimeError):
+    pass
+
+
 def _config_directory() -> Path:
     xdg_config_home = os.environ.get("XDG_CONFIG_HOME")
     if xdg_config_home:
@@ -66,12 +70,19 @@ def _get_keyring_password(profile_name: str, token_kind: str) -> str | None:
             _keyring_username(profile_name, token_kind),
         )
     except KeyringError as exc:  # pragma: no cover - OS keychain dependent
-        raise RuntimeError("Failed to access system keychain") from exc
+        raise CredentialStoreError(
+            "Sanka CLI couldn't access the system keychain. "
+            "Allow keychain access for the installed Python runtime, or run commands "
+            "with SANKA_ACCESS_TOKEN and SANKA_REFRESH_TOKEN."
+        ) from exc
 
 
 def _set_keyring_password(profile_name: str, token_kind: str, value: str) -> None:
     if keyring is None:
-        raise RuntimeError("keyring is required for persistent CLI auth")
+        raise CredentialStoreError(
+            "Sanka CLI couldn't access a supported system keychain. "
+            "Use SANKA_ACCESS_TOKEN and SANKA_REFRESH_TOKEN for non-persistent auth."
+        )
     try:
         keyring.set_password(
             KEYRING_SERVICE,
@@ -79,7 +90,11 @@ def _set_keyring_password(profile_name: str, token_kind: str, value: str) -> Non
             value,
         )
     except KeyringError as exc:  # pragma: no cover - OS keychain dependent
-        raise RuntimeError("Failed to store token in system keychain") from exc
+        raise CredentialStoreError(
+            "Sanka CLI couldn't store tokens in the system keychain. "
+            "Allow keychain access for the installed Python runtime, or use "
+            "SANKA_ACCESS_TOKEN and SANKA_REFRESH_TOKEN for non-persistent auth."
+        ) from exc
 
 
 def _delete_keyring_password(profile_name: str, token_kind: str) -> None:
@@ -193,6 +208,12 @@ def list_profiles() -> list[dict[str, Any]]:
     profiles: list[dict[str, Any]] = []
     for profile_name in sorted(config["profiles"]):
         profile = config["profiles"][profile_name] or {}
+        try:
+            has_access_token = bool(_get_keyring_password(profile_name, "access_token"))
+            has_refresh_token = bool(_get_keyring_password(profile_name, "refresh_token"))
+        except CredentialStoreError:
+            has_access_token = False
+            has_refresh_token = False
         profiles.append(
             {
                 "name": profile_name,
@@ -200,12 +221,8 @@ def list_profiles() -> list[dict[str, Any]]:
                     "/"
                 ),
                 "is_active": profile_name == active_profile,
-                "has_access_token": bool(
-                    _get_keyring_password(profile_name, "access_token")
-                ),
-                "has_refresh_token": bool(
-                    _get_keyring_password(profile_name, "refresh_token")
-                ),
+                "has_access_token": has_access_token,
+                "has_refresh_token": has_refresh_token,
             }
         )
     return profiles
@@ -246,11 +263,12 @@ def resolve_runtime(
 ) -> dict[str, Any]:
     resolved_profile_name = resolve_profile_name(profile_name)
     profile = get_profile(resolved_profile_name)
-    stored_tokens = get_tokens(resolved_profile_name)
-
     env_access_token = os.environ.get("SANKA_ACCESS_TOKEN")
     env_refresh_token = os.environ.get("SANKA_REFRESH_TOKEN")
     env_base_url = os.environ.get("SANKA_BASE_URL")
+    stored_tokens = {"access_token": None, "refresh_token": None}
+    if not (env_access_token or env_refresh_token):
+        stored_tokens = get_tokens(resolved_profile_name)
 
     return {
         "profile_name": resolved_profile_name,

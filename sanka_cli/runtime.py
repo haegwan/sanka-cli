@@ -8,6 +8,7 @@ import click
 
 from sanka_cli.client import APIError, SankaApiClient
 from sanka_cli.config import (
+    CredentialStoreError,
     clear_tokens,
     list_profiles,
     resolve_runtime,
@@ -43,10 +44,13 @@ def parse_json_input(raw: str | None) -> dict[str, Any]:
 
 
 def build_client(state: CLIState) -> SankaApiClient:
-    runtime = resolve_runtime(
-        profile_name=state.profile,
-        base_url_override=state.base_url,
-    )
+    try:
+        runtime = resolve_runtime(
+            profile_name=state.profile,
+            base_url_override=state.base_url,
+        )
+    except CredentialStoreError as exc:
+        raise click.ClickException(str(exc)) from exc
     access_token = runtime["access_token"]
     if not access_token:
         raise click.ClickException(
