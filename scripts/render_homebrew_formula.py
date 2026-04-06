@@ -114,7 +114,9 @@ def _resolve_resources_for_environment(
             continue
         package = locked_packages.get(package_name)
         if package is None:
-            raise KeyError(f"Missing locked package for Homebrew resource: {package_name}")
+            raise KeyError(
+                f"Missing locked package for Homebrew resource: {package_name}"
+            )
         resolved.add(package_name)
         for dependency in package.dependencies:
             if _marker_matches(dependency.marker, environment):
@@ -122,7 +124,9 @@ def _resolve_resources_for_environment(
     return resolved
 
 
-def resolve_resource_groups(project_root: Path) -> tuple[ResourceGroups, dict[str, LockedPackage]]:
+def resolve_resource_groups(
+    project_root: Path,
+) -> tuple[ResourceGroups, dict[str, LockedPackage]]:
     direct_dependencies = _load_direct_dependencies(project_root)
     locked_packages = _load_locked_packages(project_root)
     macos_resources = _resolve_resources_for_environment(

@@ -7,9 +7,14 @@ from pathlib import Path
 
 def _load_render_module():
     script_path = (
-        Path(__file__).resolve().parent.parent / "scripts" / "render_homebrew_formula.py"
+        Path(__file__).resolve().parent.parent
+        / "scripts"
+        / "render_homebrew_formula.py"
     )
-    spec = importlib.util.spec_from_file_location("render_homebrew_formula", script_path)
+    spec = importlib.util.spec_from_file_location(
+        "render_homebrew_formula",
+        script_path,
+    )
     assert spec is not None
     assert spec.loader is not None
     module = importlib.util.module_from_spec(spec)

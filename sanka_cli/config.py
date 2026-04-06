@@ -209,8 +209,12 @@ def list_profiles() -> list[dict[str, Any]]:
     for profile_name in sorted(config["profiles"]):
         profile = config["profiles"][profile_name] or {}
         try:
-            has_access_token = bool(_get_keyring_password(profile_name, "access_token"))
-            has_refresh_token = bool(_get_keyring_password(profile_name, "refresh_token"))
+            has_access_token = bool(
+                _get_keyring_password(profile_name, "access_token")
+            )
+            has_refresh_token = bool(
+                _get_keyring_password(profile_name, "refresh_token")
+            )
         except CredentialStoreError:
             has_access_token = False
             has_refresh_token = False
